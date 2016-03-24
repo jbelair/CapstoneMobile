@@ -30,6 +30,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import belair.worldmaptest.Maps.Map;
+import belair.worldmaptest.ParticleEngine.ParticleEngine;
 import belair.worldmaptest.Tile.Tile;
 
 public class ForestView extends SurfaceView {
@@ -39,7 +40,7 @@ public class ForestView extends SurfaceView {
     private GameLoopThread gameLoopThread;
     float xFinger = 0;
     float yFinger = 0;
-
+    //ParticleEngine PE = new ParticleEngine();
 
     Boolean isFingerDown = false;
     Paint paint = new Paint();
@@ -83,6 +84,10 @@ public class ForestView extends SurfaceView {
         map = new Map(context, "map.txt");
         player = new Player(0, 0, map);
         player.bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        //PARTICLE TEST
+       // Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
+      //  PE.generateNewParticle(tempParticleBMP, 2, 2, 2, 2, 2, 2, 2, 1000);
+
 
         Tile.grass = BitmapFactory.decodeResource(getResources(), R.drawable.grass);
         Tile.forest = BitmapFactory.decodeResource(getResources(), R.drawable.forest);
@@ -104,11 +109,12 @@ public class ForestView extends SurfaceView {
             player.isMoving = false;
         }
 
+        //PE.Update();
 
         map.Update();
         player.Update();
         map.Draw(canvas);
-
+        //PE.Draw(canvas);
         if(isFingerDown) {
 
             canvas.drawLine(player.x + player.bmp.getWidth() / 2, player.y + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
