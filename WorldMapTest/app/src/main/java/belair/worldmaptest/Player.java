@@ -127,7 +127,7 @@ public class Player extends Entity {
         if(directionY > 0){//going down
             int tempY = (int) ((y + directionY + bmp.getHeight()) / Tile.tileHeight);
             if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
-                    !CollisionWithTile((int)x + bmp.getWidth() / Tile.tileWidth, tempY)) {
+                    !CollisionWithTile((int)(x + bmp.getWidth()) / Tile.tileWidth, tempY)) {
 
                 y += directionY * speed * time;
             }
@@ -135,7 +135,7 @@ public class Player extends Entity {
         else if(directionY < 0){//going down
             int tempY = (int) ((y + directionY) / Tile.tileHeight);
             if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
-                    !CollisionWithTile((int)x + bmp.getWidth() / Tile.tileWidth, tempY)) {
+                    !CollisionWithTile((int)(x + bmp.getWidth()) / Tile.tileWidth, tempY)) {
 
                 y += directionY * speed * time;
             }
