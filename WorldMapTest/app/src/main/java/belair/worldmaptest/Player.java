@@ -104,25 +104,20 @@ public class Player extends Entity {
         isMoving = true;
     }
 
-    ////////////////////////////////////////////
-    // Both PlayerX and PlayerY need editing. //
-    // They only search for a corner per side //
-    // going right - top right                //
-    // going left - top left                  //
-    // going up - top left                    //
-    // going down - bottom left               //
-    ////////////////////////////////////////////
     public void PlayerX(){
 
         if(directionX > 0){//going right
             int tempX = (int) ((x + directionX + bmp.getWidth()) / Tile.tileWidth);
-            if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight)) {
+
+            if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight) &&
+                    !CollisionWithTile(tempX, (int)(y + bmp.getHeight()) / Tile.tileHeight)) {
                 x += directionX * speed * time;
             }
         }
         else if(directionX < 0){//going left
             int tempX = (int)((x + directionX) / Tile.tileWidth);
-            if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight)) {
+            if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight) &&
+                    !CollisionWithTile(tempX, (int)(y + bmp.getHeight()) / Tile.tileHeight)) {
                 x += directionX * speed * time;
             }
         }
@@ -131,13 +126,17 @@ public class Player extends Entity {
 
         if(directionY > 0){//going down
             int tempY = (int) ((y + directionY + bmp.getHeight()) / Tile.tileHeight);
-            if(!CollisionWithTile((int)x / Tile.tileWidth, tempY)) {
+            if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
+                    !CollisionWithTile((int)x + bmp.getWidth() / Tile.tileWidth, tempY)) {
+
                 y += directionY * speed * time;
             }
         }
         else if(directionY < 0){//going down
             int tempY = (int) ((y + directionY) / Tile.tileHeight);
-            if(!CollisionWithTile((int)x / Tile.tileWidth, tempY)) {
+            if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
+                    !CollisionWithTile((int)x + bmp.getWidth() / Tile.tileWidth, tempY)) {
+
                 y += directionY * speed * time;
             }
         }
