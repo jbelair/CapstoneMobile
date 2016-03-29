@@ -5,23 +5,15 @@ import android.graphics.Canvas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Sean on 3/18/2016.
  */
 public class ParticleEngine {
-
-    public float particleOriginX;
-    public float particleOriginY;
-    private List<Bitmap> textures = new ArrayList<Bitmap>();
     private List<Particle> particles = new ArrayList<Particle>();
-
-    public ParticleEngine (){
-        /*particleOriginX = spawnLocationX;
-        particleOriginY = spawnLocationY;
-        this.textures = _textures;
-        this.particles = new ArrayList<Particle>();*/
-    }
+    private Random random;
+    public ParticleEngine (){ }
 
     public void Update(){
         for (int i = 0; i < particles.size(); i++) {
@@ -33,7 +25,18 @@ public class ParticleEngine {
         }
     }
 
-    public void generateNewParticle(Bitmap _bmp, float _posx, float _posy, float _velx, float _vely, float _angleOfRotation,
+    public void generateNewParticles(int numOfParticles, Bitmap bmp, float minXpos, float maxXpos, float minYpos, float maxYpos,
+                                     float minXvel, float maxXvel, float minYvel, float maxYvel, float angleOfRotation,
+                                     float angleChangeRate, float size, int lifeTime){
+        for (int i = 0; i < numOfParticles; i++){
+            generateNewParticle(bmp, random.nextFloat() * (maxXpos - minXpos + 1) + minXpos, random.nextFloat() * (maxYpos - minYpos + 1) + minYpos,
+                    random.nextFloat() * (maxXvel - minXvel + 1) + minXvel, random.nextFloat() * (maxYvel - minYvel + 1) + minYvel,
+                    angleOfRotation, angleChangeRate, size, lifeTime);
+        }
+
+    }
+
+    private void generateNewParticle(Bitmap _bmp, float _posx, float _posy, float _velx, float _vely, float _angleOfRotation,
                                     float _angleChangeRate, float _size, int _lifetimeInMilliseconds){
         particles.add(new Particle(_bmp, _posx, _posy, _velx, _vely, _angleOfRotation, _angleChangeRate, _size, _lifetimeInMilliseconds));
     }
