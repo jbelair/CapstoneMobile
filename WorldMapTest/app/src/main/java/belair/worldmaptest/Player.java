@@ -15,6 +15,7 @@ public class Player extends Entity {
 
     //Animations
     private Animation walkDown, walkUp, walkLeft, walkRight, idle;
+    private long lastTick, deltaTime;
 
     public Bitmap bmp;
     public Bitmap[] animWalkDown = new Bitmap[2];
@@ -36,17 +37,20 @@ public class Player extends Entity {
     float directionY;
     float distance;
 
-    int health = 100;
+    float temp = 0.0f;
 
     public Player(float x, float y, Map map) {
         super(x, y);
         this.map = map;
+        this.setMaxHealth(200);
+        this.setHealth(200);
 
         walkDown = new Animation(500, animWalkDown);
         walkUp = new Animation(500, animWalkUp);
         walkLeft = new Animation(500, animWalkLeft);
         walkRight = new Animation(500, animWalkRight);
         idle = new Animation(500, animIdle);
+        lastTick = System.currentTimeMillis();
     }
 
     @Override
@@ -60,6 +64,23 @@ public class Player extends Entity {
         walkLeft.Update();
         walkRight.Update();
         idle.Update();
+
+        //An example of how the health works with incrementing and decrementing
+        //values such as how much is regened each second can be changed with a set
+
+        //deltaTime and lastTick used for updating the players health
+        deltaTime = System.currentTimeMillis() - lastTick;
+        lastTick = System.currentTimeMillis();
+        temp += deltaTime;
+        this.PassiveRegen(deltaTime);
+        paint.setColor(Color.GREEN);
+
+        if (temp >=10000.0f){
+            this.DecreaseHealth(10);
+            temp = temp % 10000.0f;
+            paint.setColor(Color.RED);
+        }
+
 
         if(isMoving){
             startX = x;
@@ -84,10 +105,10 @@ public class Player extends Entity {
 
     @Override
     public void Render(Canvas canvas) {
-        paint.setColor(Color.RED);
         paint.setTextSize(32);
         canvas.drawBitmap(GetCurrentAnimationFrame(), x, y, null);
-        canvas.drawText(Integer.toString(health), x, y - 50, paint);
+        int temp = getHealth();
+        canvas.drawText(Integer.toString(temp), x, y - 50, paint);
     }
 
     public boolean CollisionWithTile(int x, int y){
@@ -122,15 +143,6 @@ public class Player extends Entity {
     public void SetSpeed(int speed){
 
         this.speed = speed;
-    }
-
-    public int GetHealth(){
-
-        return this.health;
-    }
-    public void SetHealth(int health){
-
-        this.health = health;
     }
 
     public void FindDistance(){

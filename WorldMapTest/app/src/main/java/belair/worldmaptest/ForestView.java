@@ -103,7 +103,7 @@ public class ForestView extends SurfaceView {
         //PARTICLE TEST
         Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
         for(int i = 0; i < 10; i++) {
-            PE.generateNewParticle(tempParticleBMP, random.nextFloat() * (576) + 0, random.nextFloat() * (576) + 0 , random.nextFloat() * (3 - 0) + 0,random.nextFloat() * (3 - 0) + 0 , 2, 2, 2, 100000);
+            //PE.generateNewParticle(tempParticleBMP, random.nextFloat() * (576) + 0, random.nextFloat() * (576) + 0 , random.nextFloat() * (3 - 0) + 0,random.nextFloat() * (3 - 0) + 0 , 2, 2, 2, 100000);
         }
 
         Tile.grass = BitmapFactory.decodeResource(getResources(), R.drawable.grass);
