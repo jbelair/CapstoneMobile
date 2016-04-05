@@ -11,7 +11,7 @@ package belair.worldmaptest;
 //    - Collision with Entities                         //
 //    - Collision with Tiles                            //
 //    - Code needs MASSIVE overhaul on organization     //
-//    -                                                 //
+//    - Animations                                      //
 //                                                      //
 //      Future Updates                                  //
 //    - Skill tree system                               //
@@ -37,6 +37,7 @@ import belair.worldmaptest.Tile.Tile;
 
 public class ForestView extends SurfaceView {
     Player player;
+    Log log;
     Map map;
     SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
@@ -96,6 +97,9 @@ public class ForestView extends SurfaceView {
         player.animIdle[0] = BitmapFactory.decodeResource(getResources(),R.drawable.playeridle1);
         player.animIdle[1] = BitmapFactory.decodeResource(getResources(),R.drawable.playeridle2);
 
+        log = new Log(1536,1700);
+        log.logImage = BitmapFactory.decodeResource(getResources(), R.drawable.log);
+
         //PARTICLE TEST
         Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
         for(int i = 0; i < 10; i++) {
@@ -125,6 +129,7 @@ public class ForestView extends SurfaceView {
         PE.Update();
 
         map.Update();
+
         player.Update();
         map.Draw(canvas);
         PE.Draw(canvas);
@@ -133,6 +138,7 @@ public class ForestView extends SurfaceView {
             canvas.drawLine(player.x + player.bmp.getWidth() / 2, player.y + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
         }
 
+        log.Render(canvas);
         player.Render(canvas);
     }
 

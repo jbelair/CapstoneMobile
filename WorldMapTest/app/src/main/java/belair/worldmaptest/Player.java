@@ -60,7 +60,7 @@ public class Player extends Entity {
         walkLeft.Update();
         walkRight.Update();
         idle.Update();
-        
+
         if(isMoving){
             startX = x;
             startY = y;
