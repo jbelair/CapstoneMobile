@@ -29,6 +29,8 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.Random;
+
 import belair.worldmaptest.Maps.Map;
 import belair.worldmaptest.ParticleEngine.ParticleEngine;
 import belair.worldmaptest.Tile.Tile;
@@ -40,18 +42,15 @@ public class ForestView extends SurfaceView {
     private GameLoopThread gameLoopThread;
     float xFinger = 0;
     float yFinger = 0;
-    //ParticleEngine PE = new ParticleEngine();
+    ParticleEngine PE = new ParticleEngine();
 
     Boolean isFingerDown = false;
     Paint paint = new Paint();
-
+    Random random = new Random();
 
 
     public ForestView(Context context) {
         super(context);
-        DisplayMetrics dm = new DisplayMetrics();
-        int height = dm.heightPixels;
-        int width = dm.widthPixels;
         gameLoopThread = new GameLoopThread(this);
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -69,25 +68,39 @@ public class ForestView extends SurfaceView {
                     }
                 }
             }
+
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 gameLoopThread.setRunning(true);
                 gameLoopThread.start();
             }
+
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format,
                                        int width, int height) {
             }
         });
 
-
         map = new Map(context, "map.txt");
         player = new Player(0, 0, map);
         player.bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        //PARTICLE TEST
-       // Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
-      //  PE.generateNewParticle(tempParticleBMP, 2, 2, 2, 2, 2, 2, 2, 1000);
 
+        player.animWalkDown[0] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkdown1);
+        player.animWalkDown[1] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkdown2);
+        player.animWalkUp[0] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkup1);
+        player.animWalkUp[1] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkup2);
+        player.animWalkLeft[0] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkleft1);
+        player.animWalkLeft[1] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkleft2);
+        player.animWalkRight[0] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkright1);
+        player.animWalkRight[1] = BitmapFactory.decodeResource(getResources(), R.drawable.playerwalkright2);
+        player.animIdle[0] = BitmapFactory.decodeResource(getResources(),R.drawable.playeridle1);
+        player.animIdle[1] = BitmapFactory.decodeResource(getResources(),R.drawable.playeridle2);
+
+        //PARTICLE TEST
+        Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
+        for(int i = 0; i < 10; i++) {
+            PE.generateNewParticle(tempParticleBMP, random.nextFloat() * (576) + 0, random.nextFloat() * (576) + 0 , random.nextFloat() * (3 - 0) + 0,random.nextFloat() * (3 - 0) + 0 , 2, 2, 2, 100000);
+        }
 
         Tile.grass = BitmapFactory.decodeResource(getResources(), R.drawable.grass);
         Tile.forest = BitmapFactory.decodeResource(getResources(), R.drawable.forest);
@@ -109,12 +122,12 @@ public class ForestView extends SurfaceView {
             player.isMoving = false;
         }
 
-        //PE.Update();
+        PE.Update();
 
         map.Update();
         player.Update();
         map.Draw(canvas);
-        //PE.Draw(canvas);
+        PE.Draw(canvas);
         if(isFingerDown) {
 
             canvas.drawLine(player.x + player.bmp.getWidth() / 2, player.y + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
