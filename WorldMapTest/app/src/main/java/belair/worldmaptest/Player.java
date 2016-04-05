@@ -139,6 +139,12 @@ public class Player extends Entity {
         directionX = (endX - startX) / distance;
         directionY = (endY - startY) / distance;
 
+        if(distance <= 20){
+
+            directionX = 0;
+            directionY = 0;
+        }
+
     }
 
     public void FingerLift(){
