@@ -59,6 +59,14 @@ public abstract class Entity {
     protected int getBaseArmour() { return this.baseArmour; }
     protected void setBaseArmour(int _newArmourVal) { this.baseArmour = _newArmourVal; }
 
+    protected void SetEntityAttributes(int _health, int _maxHealth, boolean _canRegen, int _regenAmountPerSecond, int _baseArmour ){
+        setHealth(_health);
+        setMaxHealth(_maxHealth);
+        setRegenability(_canRegen);
+        setRegenAmount(_regenAmountPerSecond);
+        setBaseArmour(_baseArmour);
+    }
+
     boolean DecreaseHealth(int i) {
         if (isAlive) {
             if (this.prevBaseArmour != getBaseArmour()) {
