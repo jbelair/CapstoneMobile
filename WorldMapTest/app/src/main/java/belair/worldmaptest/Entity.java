@@ -11,11 +11,19 @@ import android.graphics.Canvas;
 public abstract class Entity {
 
     protected float x, y;
-
+    private int speed = 1000;
     public Entity(float x, float y) {
 
         this.x = x;
         this.y = y;
+    }
+
+    public void setSpeed(int speed){
+
+        this.speed = speed;
+    }
+    protected int getSpeed(){
+        return this.speed;
     }
 
     public abstract void Update();
@@ -25,6 +33,7 @@ public abstract class Entity {
     /**
      * Created by Sean on 4/5/2016.
      */
+    //ALL THE HEALTH STUFF
     private int health = 100;
     private int maxHealth = 100;
     private boolean canRegen = true;
@@ -102,4 +111,45 @@ public abstract class Entity {
             }
         }
     }
+    /**
+     * Created by Sean on 4/6/2016.
+     */
+    //ALL THE EXPERIENCE STUFF
+
+    private int experience;
+    private int level = 1;
+    private int expToLevelUp = 10;
+    private boolean canLevelUp = false;
+
+    protected int getExperience(){
+        return this.experience;
+    }
+    protected void setExperience(int _experience){
+        this.experience = _experience;
+    }
+
+    protected int getLevel(){
+        return this.level;
+    }
+
+    protected int getExpToLevelUp(){
+        return this.expToLevelUp - this.experience;
+    }
+
+    protected void levelUp(){
+        this.level += 1;
+        this.expToLevelUp *= 10;
+    }
+
+    protected boolean getCanLevelUp(){
+        return this.canLevelUp;
+    }
+    protected void setCanLevelUp(boolean _canlevelup){
+        this.canLevelUp = _canlevelup;
+    }
+
+
+
+
+
 }

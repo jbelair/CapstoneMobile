@@ -25,7 +25,6 @@ public class Player extends Entity {
     public Bitmap[] animIdle = new Bitmap[2];
     Paint paint = new Paint();
     Map map;
-    public int speed = 1000;
     public boolean isMoving;
     float time = 0.01f;
 
@@ -140,10 +139,7 @@ public class Player extends Entity {
         }
     }
 
-    public void SetSpeed(int speed){
 
-        this.speed = speed;
-    }
 
     public void FindDistance(){
 
@@ -174,14 +170,14 @@ public class Player extends Entity {
 
             if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight) &&
                     !CollisionWithTile(tempX, (int)(y + bmp.getHeight()) / Tile.tileHeight)) {
-                x += directionX * speed * time;
+                x += directionX * getSpeed() * time;
             }
         }
         else if(directionX < 0){//going left
             int tempX = (int)((x + directionX) / Tile.tileWidth);
             if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight) &&
                     !CollisionWithTile(tempX, (int)(y + bmp.getHeight()) / Tile.tileHeight)) {
-                x += directionX * speed * time;
+                x += directionX * getSpeed() * time;
             }
         }
     }
@@ -192,7 +188,7 @@ public class Player extends Entity {
             if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
                     !CollisionWithTile((int)(x + bmp.getWidth()) / Tile.tileWidth, tempY)) {
 
-                y += directionY * speed * time;
+                y += directionY * getSpeed() * time;
             }
         }
         else if(directionY < 0){//going down
@@ -200,7 +196,7 @@ public class Player extends Entity {
             if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
                     !CollisionWithTile((int)(x + bmp.getWidth()) / Tile.tileWidth, tempY)) {
 
-                y += directionY * speed * time;
+                y += directionY * getSpeed() * time;
             }
         }
     }
