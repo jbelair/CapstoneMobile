@@ -2,8 +2,6 @@ package belair.worldmaptest;
 
 import android.graphics.Bitmap;
 
-import java.sql.SQLSyntaxErrorException;
-
 /**
  * Created by Justin on 4/4/2016.
  */
@@ -37,6 +35,7 @@ public class Animation {
     }
 
     public Bitmap GetCurrentFrame(){
+
         return frames[index];
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 
 /**
  * Created by Justin on 3/15/2016.
+ * Modified by Sean on 4/5/2016.
  */
 public abstract class Entity {
 

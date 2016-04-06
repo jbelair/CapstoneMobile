@@ -115,31 +115,33 @@ public class ForestView extends SurfaceView {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.BLACK);
-        canvas.translate(-player.x + this.getWidth() / 2 - (player.bmp.getWidth() / 2), -player.y + this.getHeight() / 2 - (player.bmp.getHeight() / 2));
+        if(canvas != null) {
+            canvas.drawColor(Color.BLACK);
+            canvas.translate(-player.x + this.getWidth() / 2 - (player.bmp.getWidth() / 2), -player.y + this.getHeight() / 2 - (player.bmp.getHeight() / 2));
 
-        //Tile.tileArray[0].Draw(canvas, 0, 0);
-        //Tile.tileArray[1].Draw(canvas, 192,50);
+            //Tile.tileArray[0].Draw(canvas, 0, 0);
+            //Tile.tileArray[1].Draw(canvas, 192,50);
 
-        // player collision with tiles //
-        if(map.GetTile(4, 4).IsSolid()){
-            player.isMoving = false;
+            // player collision with tiles //
+            if (map.GetTile(4, 4).IsSolid()) {
+                player.isMoving = false;
+            }
+
+            PE.Update();
+
+            map.Update();
+
+            player.Update();
+            map.Draw(canvas);
+            PE.Draw(canvas);
+            if (isFingerDown) {
+
+                canvas.drawLine(player.x + player.bmp.getWidth() / 2, player.y + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
+            }
+
+            log.Render(canvas);
+            player.Render(canvas);
         }
-
-        PE.Update();
-
-        map.Update();
-
-        player.Update();
-        map.Draw(canvas);
-        PE.Draw(canvas);
-        if(isFingerDown) {
-
-            canvas.drawLine(player.x + player.bmp.getWidth() / 2, player.y + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
-        }
-
-        log.Render(canvas);
-        player.Render(canvas);
     }
 
     public boolean onTouchEvent(MotionEvent event){
