@@ -3,7 +3,7 @@ package belair.worldmaptest;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
+
 import belair.worldmaptest.Maps.Map;
 import belair.worldmaptest.Tile.Tile;
 
@@ -23,23 +23,15 @@ public class Player extends Entity {
     public Bitmap[] animWalkLeft = new Bitmap[2];
     public Bitmap[] animWalkRight = new Bitmap[2];
     public Bitmap[] animIdle = new Bitmap[2];
-    Paint paint = new Paint();
+
     Map map;
     public boolean isMoving;
     float time = 0.01f;
-
-    float startX;
-    float startY;
-    float endX;
-    float endY;
-    float directionX;
-    float directionY;
-    float distance;
-
     float temp = 0.0f;
 
     public Player(float x, float y, Map map) {
         super(x, y);
+        ///FOR COLLISION
         this.map = map;
         this.setMaxHealth(200);
         this.setHealth(200);
@@ -53,7 +45,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public void Update() {
+    protected void Update() {
         ////////////////
         // NEEDS WORK //
         ////////////////
@@ -82,8 +74,8 @@ public class Player extends Entity {
 
 
         if(isMoving){
-            startX = x;
-            startY = y;
+            setStartX(getX());
+            setStartY(getY());
 
             FindDistance();
 
@@ -91,66 +83,64 @@ public class Player extends Entity {
             PlayerY();
 
 
-            if(Math.sqrt(Math.pow(x - startX,2) + Math.pow(y - startY,2)) >= distance)
+            if(Math.sqrt(Math.pow(getX() - getStartX(),2) + Math.pow(getY() - getStartY(),2)) >= getDistance())
             {
-                x = endX;
-                y = endY;
-                startX = x;
-                startY = y;
+                setX(getEndX());
+                setY(getEndY());
+                setStartX(getX());
+                setStartY(getY());
                 isMoving = false;
             }
         }
     }
 
     @Override
-    public void Render(Canvas canvas) {
+    protected void Render(Canvas canvas) {
         paint.setTextSize(32);
-        canvas.drawBitmap(GetCurrentAnimationFrame(), x, y, null);
+        canvas.drawBitmap(GetCurrentAnimationFrame(), getX(), getY(), null);
         int temp = getHealth();
-        canvas.drawText(Integer.toString(temp), x, y - 50, paint);
+        canvas.drawText(Integer.toString(temp), getX(), getY() - 50, paint);
     }
 
     public boolean CollisionWithTile(int x, int y){
-
         return ( map.GetTile(x, y).IsSolid());
-
     }
 
     private Bitmap GetCurrentAnimationFrame(){
 
-        if(directionX > 0){//going right
-            return walkRight.GetCurrentFrame();
-        }
-        else if(directionX < 0){//going left
-            return walkLeft.GetCurrentFrame();
-         }
-        if(directionY > 0) {//going down
-            return walkDown.GetCurrentFrame();
-        }
-        else if(directionY < 0) {//going up
-            return walkDown.GetCurrentFrame();
-        }
-        if(directionX == 0 && directionY == 0){
+        if(getDirectionX() == 0 && getDirectionY() == 0){
             return idle.GetCurrentFrame();
         }
+        else if (getDirectionX() > 0 && getDirectionX() > getDirectionY()){
+            return walkRight.GetCurrentFrame();
+        }
+        else if (getDirectionY() < 0 && getDirectionX() < getDirectionY()){
+            return walkLeft.GetCurrentFrame();
+        }
+        else if (getDirectionY() > 0 && getDirectionY() > getDirectionX()){
+            return walkDown.GetCurrentFrame();
+        }
+        /////////
+        // BUG //
+        /////////
+        else if (getDirectionY() < 0 && getDirectionY() < getDirectionX()){
+            return walkUp.GetCurrentFrame();
+        }
         else{
-
             return idle.GetCurrentFrame();
         }
     }
 
-
-
     public void FindDistance(){
+        setDistance((float)Math.sqrt(Math.pow(getEndX() - getStartX(),2) + Math.pow(getEndY() - getStartY(),2)));
 
-        distance = (float)Math.sqrt(Math.pow(endX - startX,2) + Math.pow(endY - startY,2));
-        directionX = (endX - startX) / distance;
-        directionY = (endY - startY) / distance;
+        setDirectionX((getEndX() - getStartX()) / getDistance());
+        setDirectionY((getEndY() - getStartY()) / getDistance());
 
-        if(distance <= 20){
 
-            directionX = 0;
-            directionY = 0;
+        if(getDistance() <= 20){
+            setDirectionX(0);
+            setDirectionY(0);
         }
 
     }
@@ -158,45 +148,44 @@ public class Player extends Entity {
     public void FingerLift(){
 
         FindDistance();
-        x = startX;
-        y = startY;
+        setX(getStartX());
+        setY(getStartY());
         isMoving = true;
     }
 
     public void PlayerX(){
 
-        if(directionX > 0){//going right
-            int tempX = (int) ((x + directionX + bmp.getWidth()) / Tile.tileWidth);
+        if(getDirectionX() > 0){//going right
+            int tempX = (int) ((getX() + getDirectionX() + bmp.getWidth()) / Tile.tileWidth);
 
-            if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight) &&
-                    !CollisionWithTile(tempX, (int)(y + bmp.getHeight()) / Tile.tileHeight)) {
-                x += directionX * getSpeed() * time;
+            if(!CollisionWithTile(tempX, (int)getY() / Tile.tileHeight) &&
+                    !CollisionWithTile(tempX, (int)(getY() + bmp.getHeight()) / Tile.tileHeight)) {
+                setX(getX() + getDirectionX() * getSpeed() * time);
             }
         }
-        else if(directionX < 0){//going left
-            int tempX = (int)((x + directionX) / Tile.tileWidth);
-            if(!CollisionWithTile(tempX, (int)y / Tile.tileHeight) &&
-                    !CollisionWithTile(tempX, (int)(y + bmp.getHeight()) / Tile.tileHeight)) {
-                x += directionX * getSpeed() * time;
+        else if(getDirectionX() < 0){//going left
+            int tempX = (int)((getX() + getDirectionX()) / Tile.tileWidth);
+            if(!CollisionWithTile(tempX, (int)getY() / Tile.tileHeight) &&
+                    !CollisionWithTile(tempX, (int)(getY() + bmp.getHeight()) / Tile.tileHeight)) {
+                setX(getX() + getDirectionX() * getSpeed() * time);
             }
         }
     }
+
     public void PlayerY(){
 
-        if(directionY > 0){//going down
-            int tempY = (int) ((y + directionY + bmp.getHeight()) / Tile.tileHeight);
-            if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
-                    !CollisionWithTile((int)(x + bmp.getWidth()) / Tile.tileWidth, tempY)) {
-
-                y += directionY * getSpeed() * time;
+        if(getDirectionY() > 0){//going down
+            int tempY = (int) ((getY() + getDirectionY() + bmp.getHeight()) / Tile.tileHeight);
+            if(!CollisionWithTile((int)getX() / Tile.tileWidth, tempY) &&
+                    !CollisionWithTile((int)(getX() + bmp.getWidth()) / Tile.tileWidth, tempY)) {
+                setY(getY() + getDirectionY() * getSpeed() * time);
             }
         }
-        else if(directionY < 0){//going down
-            int tempY = (int) ((y + directionY) / Tile.tileHeight);
-            if(!CollisionWithTile((int)x / Tile.tileWidth, tempY) &&
-                    !CollisionWithTile((int)(x + bmp.getWidth()) / Tile.tileWidth, tempY)) {
-
-                y += directionY * getSpeed() * time;
+        else if(getDirectionY() < 0){//going down
+            int tempY = (int) ((getY() + getDirectionY()) / Tile.tileHeight);
+            if(!CollisionWithTile((int)getX() / Tile.tileWidth, tempY) &&
+                    !CollisionWithTile((int)(getX() + bmp.getWidth()) / Tile.tileWidth, tempY)) {
+                setY(getY() + getDirectionY() * getSpeed() * time);
             }
         }
     }

@@ -26,6 +26,6 @@ public class Log extends Entity{
     @Override
     public void Render(Canvas canvas) {
         paint.setColor(Color.TRANSPARENT);
-        canvas.drawBitmap(logImage, x, y, null);
+        canvas.drawBitmap(logImage, getX(), getY(), null);
     }
 }

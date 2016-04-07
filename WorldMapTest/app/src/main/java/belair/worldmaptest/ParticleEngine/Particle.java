@@ -33,13 +33,13 @@ public class Particle extends Entity {
     @Override
     public void Update() {
         life--;
-        x += velx;
-        y += vely;
+        setX(getX() + velx);
+        setY(getY() + vely);
         angleOfRot += angleROC;
     }
 
     @Override
     public void Render(Canvas canvas) {
-        canvas.drawBitmap(bmp, x, y, null);
+        canvas.drawBitmap(bmp, getX(), getY(), null);
     }
 }

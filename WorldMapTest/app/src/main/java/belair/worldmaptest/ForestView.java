@@ -117,7 +117,7 @@ public class ForestView extends SurfaceView {
     protected void onDraw(Canvas canvas) {
         if(canvas != null) {
             canvas.drawColor(Color.BLACK);
-            canvas.translate(-player.x + this.getWidth() / 2 - (player.bmp.getWidth() / 2), -player.y + this.getHeight() / 2 - (player.bmp.getHeight() / 2));
+            canvas.translate(-player.getX() + this.getWidth() / 2 - (player.bmp.getWidth() / 2), -player.getY() + this.getHeight() / 2 - (player.bmp.getHeight() / 2));
 
             //Tile.tileArray[0].Draw(canvas, 0, 0);
             //Tile.tileArray[1].Draw(canvas, 192,50);
@@ -136,7 +136,7 @@ public class ForestView extends SurfaceView {
             PE.Draw(canvas);
             if (isFingerDown) {
 
-                canvas.drawLine(player.x + player.bmp.getWidth() / 2, player.y + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
+                canvas.drawLine(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
             }
 
             log.Render(canvas);
@@ -151,25 +151,27 @@ public class ForestView extends SurfaceView {
             case MotionEvent.ACTION_DOWN:
                 if (player.isMoving){
                     player.isMoving = false;
-                    player.endX = player.x;
-                    player.endY = player.y;
+                    player.setEndX(player.getX());
+                    player.setEndY(player.getY());
 
                 }
-                xFinger = event.getX() + player.x - 1080 / 2 + (player.bmp.getWidth() / 2);
-                yFinger = event.getY()  + player.y - 1920 / 2 + (player.bmp.getHeight() / 2);
+                xFinger = event.getX() + player.getX() - 1080 / 2 + (player.bmp.getWidth() / 2);
+                yFinger = event.getY()  + player.getY() - 1920 / 2 + (player.bmp.getHeight() / 2);
                 isFingerDown = true;
                 invalidate();
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                xFinger = event.getX() + player.x - 1080 / 2 + (player.bmp.getWidth() / 2);
-                yFinger = event.getY() + player.y - 1920 / 2 + (player.bmp.getHeight() / 2);
+                xFinger = event.getX() + player.getX() - 1080 / 2 + (player.bmp.getWidth() / 2);
+                yFinger = event.getY() + player.getY() - 1920 / 2 + (player.bmp.getHeight() / 2);
                 isFingerDown = true;
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                player.endX = xFinger = event.getX() + player.x - 1080 / 2 + (player.bmp.getWidth() / 2);
-                player.endY = yFinger = event.getY() + player.y - 1920 / 2 + (player.bmp.getHeight() / 2);
+                player.setEndX(event.getX() + player.getX() - 1080 / 2 + (player.bmp.getWidth() / 2));
+                player.setEndY(event.getY() + player.getY() - 1920 / 2 + (player.bmp.getHeight() / 2));
+                xFinger = player.getEndX();
+                yFinger = player.getEndY();
                 isFingerDown = false;
 
                 player.FingerLift();

@@ -1,8 +1,9 @@
 package belair.worldmaptest;
 
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 /**
  * Created by Justin on 3/15/2016.
@@ -10,13 +11,42 @@ import android.graphics.Canvas;
  */
 public abstract class Entity {
 
-    protected float x, y;
+    Paint paint = new Paint();
+    private float x, y;
     private int speed = 1000;
+    private float startX, startY;
+    private float endX, endY;
+    private float directionX,directionY;
+    private float distance;
     public Entity(float x, float y) {
 
         this.x = x;
         this.y = y;
     }
+
+    protected float getX(){return this.x;}
+    protected void setX(float _newX){this.x = _newX;}
+    protected float getY(){return this.y;}
+    protected void setY(float _newY){this.y = _newY;}
+
+    protected float getStartX(){return this.startX;}
+    protected void setStartX(float _newStartX){this.startX = _newStartX;}
+    protected float getStartY(){return this.startY;}
+    protected void setStartY(float _newStartY){this.startY = _newStartY;}
+
+    protected float getEndX(){return this.endX;}
+    protected void setEndX(float _newEndX){this.endX = _newEndX;}
+    protected float getEndY(){return this.endY;}
+    protected void setEndY(float _newEndY){this.endY = _newEndY;}
+
+    protected float getDirectionX(){return this.directionX;}
+    protected void setDirectionX(float _newDirectionX){this.directionX = _newDirectionX;}
+    protected float getDirectionY(){return this.directionY;}
+    protected void setDirectionY(float _newDirectionY){this.directionY = _newDirectionY;}
+
+    protected float getDistance(){return this.distance;}
+    protected void setDistance(float _newDistance){this.distance = _newDistance;}
+
 
     public void setSpeed(int speed){
 
@@ -26,9 +56,9 @@ public abstract class Entity {
         return this.speed;
     }
 
-    public abstract void Update();
+    protected abstract void Update();
 
-    public abstract void Render(Canvas canvas);
+    protected abstract void Render(Canvas canvas);
 
     /**
      * Created by Sean on 4/5/2016.
@@ -68,7 +98,7 @@ public abstract class Entity {
     protected int getBaseArmour() { return this.baseArmour; }
     protected void setBaseArmour(int _newArmourVal) { this.baseArmour = _newArmourVal; }
 
-    protected void SetEntityAttributes(int _health, int _maxHealth, boolean _canRegen, int _regenAmountPerSecond, int _baseArmour ){
+    protected void SetEntityHealthAttributes(int _health, int _maxHealth, boolean _canRegen, int _regenAmountPerSecond, int _baseArmour ){
         setHealth(_health);
         setMaxHealth(_maxHealth);
         setRegenability(_canRegen);
@@ -147,9 +177,4 @@ public abstract class Entity {
     protected void setCanLevelUp(boolean _canlevelup){
         this.canLevelUp = _canlevelup;
     }
-
-
-
-
-
 }
