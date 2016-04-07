@@ -25,7 +25,6 @@ public class Player extends Entity {
     public Bitmap[] animIdle = new Bitmap[2];
 
     Map map;
-    public boolean isMoving;
     float time = 0.01f;
     float temp = 0.0f;
 
@@ -73,7 +72,7 @@ public class Player extends Entity {
         }
 
 
-        if(isMoving){
+        if(getIsMoving()){
             setStartX(getX());
             setStartY(getY());
 
@@ -89,7 +88,7 @@ public class Player extends Entity {
                 setY(getEndY());
                 setStartX(getX());
                 setStartY(getY());
-                isMoving = false;
+                setIsMoving(false);
             }
         }
     }
@@ -150,7 +149,7 @@ public class Player extends Entity {
         FindDistance();
         setX(getStartX());
         setY(getStartY());
-        isMoving = true;
+        setIsMoving(true);
     }
 
     public void PlayerX(){

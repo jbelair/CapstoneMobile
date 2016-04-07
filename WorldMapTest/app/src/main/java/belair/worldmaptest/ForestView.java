@@ -124,7 +124,7 @@ public class ForestView extends SurfaceView {
 
             // player collision with tiles //
             if (map.GetTile(4, 4).IsSolid()) {
-                player.isMoving = false;
+                player.setIsMoving(false);
             }
 
             PE.Update();
@@ -149,8 +149,8 @@ public class ForestView extends SurfaceView {
         switch(event.getAction()){
 
             case MotionEvent.ACTION_DOWN:
-                if (player.isMoving){
-                    player.isMoving = false;
+                if (player.getIsMoving()){
+                    player.setIsMoving(false);
                     player.setEndX(player.getX());
                     player.setEndY(player.getY());
 

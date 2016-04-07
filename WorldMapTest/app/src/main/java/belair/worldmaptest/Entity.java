@@ -18,6 +18,7 @@ public abstract class Entity {
     private float endX, endY;
     private float directionX,directionY;
     private float distance;
+    private boolean isMoving;
     public Entity(float x, float y) {
 
         this.x = x;
@@ -47,6 +48,8 @@ public abstract class Entity {
     protected float getDistance(){return this.distance;}
     protected void setDistance(float _newDistance){this.distance = _newDistance;}
 
+    protected boolean getIsMoving(){return this.isMoving;}
+    protected void setIsMoving(boolean _state){this.isMoving = _state;}
 
     public void setSpeed(int speed){
 
