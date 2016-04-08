@@ -16,7 +16,6 @@ public class Log extends Entity{
     public Log(float x, float y){
         super(x, y);
 
-
     }
     @Override
     public void Update() {

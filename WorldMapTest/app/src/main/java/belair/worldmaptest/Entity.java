@@ -19,6 +19,9 @@ public abstract class Entity {
     private float directionX,directionY;
     private float distance;
     private boolean isMoving;
+
+    public boolean isColliding = false;
+    float radius;
     public Entity(float x, float y) {
 
         this.x = x;
@@ -179,5 +182,16 @@ public abstract class Entity {
     }
     protected void setCanLevelUp(boolean _canlevelup){
         this.canLevelUp = _canlevelup;
+    }
+
+    public void CircleCircleCollision(float otherX, float otherY, float otherRadius){
+
+        float distance = (float)Math.sqrt(((getX() - otherX) * (getX() - otherX)) + ((getY() - otherY) * (getY() - otherY)));
+        if(distance < radius + otherRadius){
+            isColliding = true;
+        }
+        else{
+            isColliding = false;
+        }
     }
 }

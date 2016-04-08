@@ -100,6 +100,10 @@ public class ForestView extends SurfaceView {
         log = new Log(1536,1700);
         log.logImage = BitmapFactory.decodeResource(getResources(), R.drawable.log);
 
+        log.radius = log.logImage.getWidth() / 2;
+
+        player.radius = player.bmp.getWidth() / 2;
+
         //PARTICLE TEST
         Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
         for(int i = 0; i < 10; i++) {
@@ -132,6 +136,7 @@ public class ForestView extends SurfaceView {
             map.Update();
 
             player.Update();
+            player.CircleCircleCollision(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.radius);
             map.Draw(canvas);
             PE.Draw(canvas);
             if (isFingerDown) {
@@ -141,6 +146,17 @@ public class ForestView extends SurfaceView {
 
             log.Render(canvas);
             player.Render(canvas);
+            if(player.isColliding){
+                paint.setColor(Color.GREEN);
+                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.radius, paint);
+                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.radius, paint);
+
+            }
+            else {
+                paint.setColor(Color.WHITE);
+                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.radius, paint);
+                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.radius, paint);
+            }
         }
     }
 
