@@ -25,6 +25,7 @@ import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 
 import java.util.Random;
 
@@ -42,6 +43,7 @@ public class ForestView extends SurfaceView {
     float xFinger = 0;
     float yFinger = 0;
     ParticleEngine PE = new ParticleEngine();
+    //Button inventoryButton;
 
     Boolean isFingerDown = false;
     Paint paint = new Paint();
@@ -163,6 +165,13 @@ public class ForestView extends SurfaceView {
                 canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius(), paint);
                 canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
             }
+
+            //inventoryButton = (Button)findViewById(R.id.InventoryButton);
+            paint.setColor(Color.WHITE);
+            canvas.drawRect(player.getX() + 400, player.getY() - 760, player.getX() + 600, player.getY() - 560, paint);
+            paint.setColor(Color.MAGENTA);
+            paint.setTextSize(100);
+            canvas.drawText("INV", player.getX() + 420, player.getY() - 620, paint);
         }
     }
 

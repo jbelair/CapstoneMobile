@@ -21,6 +21,14 @@ public abstract class Entity {
 
     Inventory inventory = new Inventory();
 
+    private int currency = 0;
+    public int getCurrency(){
+        return this.currency;
+    }
+    public void setCurrency(int amount){
+        this.currency += amount;
+    }
+
     private boolean isColliding = false;
     private float radius;
 
@@ -134,7 +142,7 @@ public abstract class Entity {
         setIsAlive(true);
     }
 
-    boolean DecreaseHealth(int i) {
+    public boolean DecreaseHealth(int i) {
         if (getIsAlive()) {
             if (this.prevBaseArmour != getBaseArmour()) {
                 this.prevBaseArmour = getBaseArmour();
@@ -151,7 +159,7 @@ public abstract class Entity {
         return getIsAlive();
     }
 
-    void IncreaseHealth(int i) {
+    public void IncreaseHealth(int i) {
         if (getIsAlive()) {
             if (getHealth() > getMaxHealth()) {
                 setHealth(getMaxHealth());
@@ -217,8 +225,12 @@ public abstract class Entity {
         float distance = (float)Math.sqrt(((getX() - otherX) * (getX() - otherX)) + ((getY() - otherY) * (getY() - otherY)));
         if(distance < getRadius() + otherRadius){
             setIsColliding(true);
-            inventory.AddItem(new Item("wood", 0,  5, 40));
+            inventory.AddItem(new Weapon("sword", 2, 5, 10, 15, 5, 1, 50));
             System.out.println(inventory.GetItemName(0));
+//            inventory.AddItem(new Item("wood", 1, 5, 40));
+//            System.out.println(inventory.GetItemQuantity(0));
+//            setCurrency(inventory.SellItemStack(0));
+//            System.out.println(currency);
         }
         else{
             setIsColliding(false);
