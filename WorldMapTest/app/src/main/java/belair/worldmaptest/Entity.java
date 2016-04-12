@@ -98,7 +98,7 @@ public abstract class Entity {
     private int regenAmount = 2;
     private float regenTime = 1000.0f / regenAmount;
     private float time = 0.01f;
-    private boolean isAlive = true;
+    protected boolean isAlive = true;
     //takes off that percent of damage;
     private int baseArmour = 5;
     private int prevBaseArmour = baseArmour;

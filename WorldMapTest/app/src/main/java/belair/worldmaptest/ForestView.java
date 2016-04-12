@@ -151,7 +151,7 @@ public class ForestView extends SurfaceView {
                 canvas.drawLine(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
             }
 
-            tree.Render(canvas);
+
             player.Render(canvas);
             enemy.Render(canvas);
             if(player.getIsColliding()){
@@ -159,11 +159,19 @@ public class ForestView extends SurfaceView {
                 //////////////////////////////
                 // Inventory stuff for logs //
                 //////////////////////////////
+
                 paint.setColor(Color.WHITE);
                 canvas.drawRect(player.getX() + 200, player.getY() - 760, player.getX() + 600, player.getY() - 560, paint);
                 paint.setColor(Color.BLUE);
                 canvas.drawText(log.itemName + "(" + log.quantity + ")", player.getX() + 220, player.getY() - 620, paint);
-                log.setQuantity(log.getQuantity() + 1);
+                if(tree.getIsAlive()) {
+                    tree.Update();
+                    tree.Render(canvas);
+                    log.setQuantity(log.getQuantity() + 1);
+                }
+                else{
+
+                }
 
                 /////////////////////////////
                 // Collision Debug Circles //
