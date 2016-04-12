@@ -22,10 +22,7 @@ package belair.worldmaptest;
 //////////////////////////////////////////////////////////
 import android.content.Context;
 import android.graphics.*;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -37,6 +34,7 @@ import belair.worldmaptest.Tile.Tile;
 
 public class ForestView extends SurfaceView {
     Player player;
+    Enemy enemy;
     Log log;
     Map map;
     SurfaceHolder holder;
@@ -97,12 +95,15 @@ public class ForestView extends SurfaceView {
         player.animIdle[0] = BitmapFactory.decodeResource(getResources(),R.drawable.playeridle1);
         player.animIdle[1] = BitmapFactory.decodeResource(getResources(),R.drawable.playeridle2);
 
+        enemy = new Enemy(1000, 1000);
+        enemy.setBmp(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+
         log = new Log(1536,1700);
         log.logImage = BitmapFactory.decodeResource(getResources(), R.drawable.log);
 
-        log.radius = log.logImage.getWidth() / 2;
+        log.setRadius(log.logImage.getWidth() / 2);
 
-        player.radius = player.bmp.getWidth() / 2;
+        player.setRadius(player.bmp.getWidth() / 2);
 
         //PARTICLE TEST
         Bitmap tempParticleBMP = BitmapFactory.decodeResource(getResources(), R.raw.particletest);
@@ -131,31 +132,36 @@ public class ForestView extends SurfaceView {
                 player.setIsMoving(false);
             }
 
+            //Updating everything
             PE.Update();
-
             map.Update();
-
             player.Update();
-            player.CircleCircleCollision(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.radius);
+            if (player.getIsAlive() && player.getIsMoving() && Math.sqrt(Math.pow(getX() - enemy.getStartX(),2) + Math.pow(getY() - enemy.getStartY(),2)) <= enemy.getDistance() && !enemy.getIsMoving()){
+                enemy.setIsMoving(true);
+            }
+            enemy.setEnd(player.getX(), player.getY());
+            enemy.Update();
+
+            player.CircleCircleCollision(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius());
             map.Draw(canvas);
             PE.Draw(canvas);
             if (isFingerDown) {
-
                 canvas.drawLine(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
             }
 
             log.Render(canvas);
             player.Render(canvas);
-            if(player.isColliding){
+            enemy.Render(canvas);
+            if(player.getIsColliding()){
                 paint.setColor(Color.GREEN);
-                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.radius, paint);
-                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.radius, paint);
+                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius(), paint);
+                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
 
             }
             else {
                 paint.setColor(Color.WHITE);
-                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.radius, paint);
-                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.radius, paint);
+                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius(), paint);
+                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
             }
         }
     }

@@ -1,5 +1,6 @@
 package belair.worldmaptest;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
@@ -8,55 +9,49 @@ import android.graphics.Color;
  */
 public class Enemy extends Entity {
     private long lastTick, deltaTime;
-    float temp = 0.0f;
+    private Bitmap bmp;
+    protected void setBmp(Bitmap _bmp){bmp = _bmp;}
+    float temp = 0.0f, time = 0.01f;
 
     public Enemy(float x, float y){
         super(x, y);
-
+        setSpeed(500);
+        SetEntityHealthAttributes(100, 100, true, 1, 5);
+        setExperience(48);
+        if (getCanLevelUp())
+        setCanLevelUp(false);
+        setIsMoving(true);
     }
 
     @Override
     protected void Update() {
+        if(getIsMoving()){
+            setStartX(getX());
+            setStartY(getY());
 
-        //An example of how the health works with incrementing and decrementing
-        //values such as how much is regened each second can be changed with a set
+            FindDistance();
+            UpdateEntityXY();
 
-        //deltaTime and lastTick used for updating the players health
-        deltaTime = System.currentTimeMillis() - lastTick;
-        lastTick = System.currentTimeMillis();
-        temp += deltaTime;
-        this.PassiveRegen(deltaTime);
-        paint.setColor(Color.GREEN);
-
-        if (temp >= 10000.0f) {
-            this.DecreaseHealth(10);
-            temp = temp % 10000.0f;
-            paint.setColor(Color.RED);
+            if(Math.sqrt(Math.pow(getX() - getStartX(),2) + Math.pow(getY() - getStartY(),2)) >= getDistance()) {
+                setX(getEndX());
+                setY(getEndY());
+                setStartX(getX());
+                setStartY(getY());
+                setIsMoving(false);
+            }
         }
-
-
-        /*startX = x;
-        startY = y;
-
-        FindDistance();
-
-        PlayerX();
-        PlayerY();
-
-
-        if (Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2)) >= distance) {
-            x = endX;
-            y = endY;
-            startX = x;
-            startY = y;
-            isMoving = false;
-        }*/
 
     }
 
     @Override
     protected void Render(Canvas canvas){
-
+        getPaint().setTextSize(32);
+        getPaint().setColor(Color.GREEN);
+        canvas.drawBitmap(bmp, getX(), getY(), null);
+        int temp = getHealth();
+        canvas.drawText(Integer.toString(temp), getX(), getY() - 50, getPaint());
     }
+
+
 
 }

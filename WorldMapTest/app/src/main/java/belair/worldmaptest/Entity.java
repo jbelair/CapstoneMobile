@@ -1,6 +1,5 @@
 package belair.worldmaptest;
 
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,18 +13,18 @@ public abstract class Entity {
     Paint paint = new Paint();
     private float x, y;
     private int speed = 1000;
-    private float startX, startY;
-    private float endX, endY;
-    private float directionX,directionY;
-    private float distance;
-    private boolean isMoving;
+    private float startX = 0, startY = 0;
+    private float endX = 0, endY = 0;
+    private float directionX = 0, directionY = 0;
+    private float distance = 0;
+    private boolean isMoving = false;
 
-    public boolean isColliding = false;
-    float radius;
-    public Entity(float x, float y) {
+    private boolean isColliding = false;
+    private float radius;
 
-        this.x = x;
-        this.y = y;
+    public Entity(float _x, float _y) {
+        this.x = _x;
+        this.y = _y;
     }
 
     protected float getX(){return this.x;}
@@ -42,6 +41,12 @@ public abstract class Entity {
     protected void setEndX(float _newEndX){this.endX = _newEndX;}
     protected float getEndY(){return this.endY;}
     protected void setEndY(float _newEndY){this.endY = _newEndY;}
+    protected void setEnd(float _x, float _y){
+        setEndX(_x);
+        setEndY(_y);
+    }
+
+    protected Paint getPaint(){return this.paint;}
 
     protected float getDirectionX(){return this.directionX;}
     protected void setDirectionX(float _newDirectionX){this.directionX = _newDirectionX;}
@@ -54,14 +59,20 @@ public abstract class Entity {
     protected boolean getIsMoving(){return this.isMoving;}
     protected void setIsMoving(boolean _state){this.isMoving = _state;}
 
-    public void setSpeed(int speed){
+    public void setSpeed(int speed){this.speed = speed;}
+    protected int getSpeed(){return this.speed;}
 
-        this.speed = speed;
-    }
-    protected int getSpeed(){
-        return this.speed;
-    }
+    protected boolean getIsColliding(){return this.isColliding;}
+    protected void setIsColliding(boolean state){this.isColliding = state;}
 
+    protected float getRadius(){return this.radius;}
+    protected void setRadius(float _newRadius){this.radius = _newRadius;}
+
+    ////////////////////
+    ////////////////////
+    ///// ABSTRACT /////
+    ////////////////////
+    ////////////////////
     protected abstract void Update();
 
     protected abstract void Render(Canvas canvas);
@@ -76,7 +87,7 @@ public abstract class Entity {
     //health per second
     private int regenAmount = 2;
     private float regenTime = 1000.0f / regenAmount;
-    private float time;
+    private float time = 0.01f;
     private boolean isAlive = true;
     //takes off that percent of damage;
     private int baseArmour = 5;
@@ -86,7 +97,15 @@ public abstract class Entity {
     protected boolean getIsAlive(){return this.isAlive;}
     protected void setIsAlive(boolean state){this.isAlive = state;}
 
-    protected int getHealth() { return this.health; }
+    protected int getHealth() {
+        if (this.health <= getMaxHealth() * 0.2f) {
+            this.paint.setColor(Color.RED);
+        }
+        else if (this.health <= getMaxHealth() * 0.5f){
+            this.paint.setColor(Color.YELLOW);
+        }
+        return this.health;
+    }
     protected void setHealth(int _health) { this.health = _health; }
 
     protected int getMaxHealth() { return this.maxHealth; }
@@ -98,7 +117,7 @@ public abstract class Entity {
     protected int getRegenAmount() { return this.regenAmount; }
     protected void setRegenAmount(int _regen) {
         this.regenAmount = _regen;
-        regenTime = 1000.0f / regenAmount;
+        this.regenTime = 1000.0f / this.regenAmount;
     }
 
     protected int getBaseArmour() { return this.baseArmour; }
@@ -110,39 +129,42 @@ public abstract class Entity {
         setRegenability(_canRegen);
         setRegenAmount(_regenAmountPerSecond);
         setBaseArmour(_baseArmour);
+        setIsAlive(true);
     }
 
     boolean DecreaseHealth(int i) {
-        if (isAlive) {
+        if (getIsAlive()) {
             if (this.prevBaseArmour != getBaseArmour()) {
                 this.prevBaseArmour = getBaseArmour();
                 this.percentOffDamage = getBaseArmour() / 100;
             }
 
-            setHealth(getHealth() - (int) (i - (i * this.percentOffDamage)));
+            setHealth(getHealth() - (int)(i - (i * this.percentOffDamage)));
+            this.paint.setColor(Color.RED);
             if (getHealth() <= 0) {
                 setHealth(0);
-                this.isAlive = false;
+                setIsAlive(false);
             }
         }
-        return this.isAlive;
+        return getIsAlive();
     }
 
     void IncreaseHealth(int i) {
-        if (this.isAlive) {
+        if (getIsAlive()) {
             if (getHealth() > getMaxHealth()) {
                 setHealth(getMaxHealth());
             } else if (getHealth() < getMaxHealth()) {
                 setHealth(getHealth() + i);
             }
+            this.paint.setColor(Color.GREEN);
         }
     }
 
     void PassiveRegen(float deltaTime) {
         if (getRegenability()) {
             this.time += deltaTime;
-            if (this.time >= regenTime) {
-                this.time = this.time % regenTime;
+            if (this.time >= this.regenTime) {
+                this.time = this.time % this.regenTime;
                 IncreaseHealth(1);
             }
         }
@@ -152,7 +174,7 @@ public abstract class Entity {
      */
     //ALL THE EXPERIENCE STUFF
 
-    private int experience;
+    private int experience = 0;
     private int level = 1;
     private int expToLevelUp = 10;
     private boolean canLevelUp = false;
@@ -184,14 +206,51 @@ public abstract class Entity {
         this.canLevelUp = _canlevelup;
     }
 
-    public void CircleCircleCollision(float otherX, float otherY, float otherRadius){
+
+    /*
+    * Justin
+    */
+    protected void CircleCircleCollision(float otherX, float otherY, float otherRadius){
 
         float distance = (float)Math.sqrt(((getX() - otherX) * (getX() - otherX)) + ((getY() - otherY) * (getY() - otherY)));
-        if(distance < radius + otherRadius){
-            isColliding = true;
+        if(distance < getRadius() + otherRadius){
+            setIsColliding(true);
         }
         else{
-            isColliding = false;
+            setIsColliding(false);
         }
     }
+
+    protected void FindDistance(){
+        setDistance((float)Math.sqrt(Math.pow(getEndX() - getStartX(),2) + Math.pow(getEndY() - getStartY(),2)));
+
+        setDirectionX((getEndX() - getStartX()) / getDistance());
+        setDirectionY((getEndY() - getStartY()) / getDistance());
+
+
+        if(getDistance() <= 20){
+            setDirectionX(0);
+            setDirectionY(0);
+        }
+
+    }
+
+    protected void UpdateEntityXY(){
+        EntityX();
+        EntityY();
+    }
+
+    protected void EntityX(){
+        if (getDirectionX() > 0 || getDirectionX() < 0){
+            setX(getX() + getDirectionX() * getSpeed() * time);
+        }
+    }
+
+    protected void EntityY() {
+        if (getDirectionY() > 0 || getDirectionY() < 0) {
+            setY(getY() + getDirectionY() * getSpeed() * time);
+        }
+    }
+
+
 }

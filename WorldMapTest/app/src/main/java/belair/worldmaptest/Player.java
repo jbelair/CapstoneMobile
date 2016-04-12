@@ -32,8 +32,7 @@ public class Player extends Entity {
         super(x, y);
         ///FOR COLLISION
         this.map = map;
-        this.setMaxHealth(200);
-        this.setHealth(200);
+        SetEntityHealthAttributes(200, 200, true, 10, 5);
 
         walkDown = new Animation(500, animWalkDown);
         walkUp = new Animation(500, animWalkUp);
@@ -63,14 +62,13 @@ public class Player extends Entity {
         lastTick = System.currentTimeMillis();
         temp += deltaTime;
         this.PassiveRegen(deltaTime);
-        paint.setColor(Color.GREEN);
+        this.paint.setColor(Color.GREEN);
 
         if (temp >=10000.0f){
             this.DecreaseHealth(10);
             temp = temp % 10000.0f;
-            paint.setColor(Color.RED);
+            this.paint.setColor(Color.RED);
         }
-
 
         if(getIsMoving()){
             setStartX(getX());
@@ -78,8 +76,8 @@ public class Player extends Entity {
 
             FindDistance();
 
-            PlayerX();
-            PlayerY();
+            EntityX();
+            EntityY();
 
 
             if(Math.sqrt(Math.pow(getX() - getStartX(),2) + Math.pow(getY() - getStartY(),2)) >= getDistance())
@@ -95,10 +93,10 @@ public class Player extends Entity {
 
     @Override
     protected void Render(Canvas canvas) {
-        paint.setTextSize(32);
+        this.paint.setTextSize(32);
         canvas.drawBitmap(GetCurrentAnimationFrame(), getX(), getY(), null);
         int temp = getHealth();
-        canvas.drawText(Integer.toString(temp), getX(), getY() - 50, paint);
+        canvas.drawText(Integer.toString(temp), getX(), getY() - 50, this.paint);
     }
 
     public boolean CollisionWithTile(int x, int y){
@@ -130,19 +128,7 @@ public class Player extends Entity {
         }
     }
 
-    public void FindDistance(){
-        setDistance((float)Math.sqrt(Math.pow(getEndX() - getStartX(),2) + Math.pow(getEndY() - getStartY(),2)));
 
-        setDirectionX((getEndX() - getStartX()) / getDistance());
-        setDirectionY((getEndY() - getStartY()) / getDistance());
-
-
-        if(getDistance() <= 20){
-            setDirectionX(0);
-            setDirectionY(0);
-        }
-
-    }
 
     public void FingerLift(){
 
@@ -152,38 +138,36 @@ public class Player extends Entity {
         setIsMoving(true);
     }
 
-    public void PlayerX(){
+    @Override
+    public void EntityX(){
 
         if(getDirectionX() > 0){//going right
-            int tempX = (int) ((getX() + getDirectionX() + bmp.getWidth()) / Tile.tileWidth);
+            int tempX = (int)((getX() + getDirectionX() + bmp.getWidth()) / Tile.tileWidth);
 
-            if(!CollisionWithTile(tempX, (int)getY() / Tile.tileHeight) &&
-                    !CollisionWithTile(tempX, (int)(getY() + bmp.getHeight()) / Tile.tileHeight)) {
+            if(!CollisionWithTile(tempX, (int)getY() / Tile.tileHeight) && !CollisionWithTile(tempX, (int)(getY() + bmp.getHeight()) / Tile.tileHeight)) {
                 setX(getX() + getDirectionX() * getSpeed() * time);
             }
         }
         else if(getDirectionX() < 0){//going left
             int tempX = (int)((getX() + getDirectionX()) / Tile.tileWidth);
-            if(!CollisionWithTile(tempX, (int)getY() / Tile.tileHeight) &&
-                    !CollisionWithTile(tempX, (int)(getY() + bmp.getHeight()) / Tile.tileHeight)) {
+            if(!CollisionWithTile(tempX, (int)getY() / Tile.tileHeight) && !CollisionWithTile(tempX, (int)(getY() + bmp.getHeight()) / Tile.tileHeight)) {
                 setX(getX() + getDirectionX() * getSpeed() * time);
             }
         }
     }
 
-    public void PlayerY(){
+    @Override
+    public void EntityY(){
 
         if(getDirectionY() > 0){//going down
-            int tempY = (int) ((getY() + getDirectionY() + bmp.getHeight()) / Tile.tileHeight);
-            if(!CollisionWithTile((int)getX() / Tile.tileWidth, tempY) &&
-                    !CollisionWithTile((int)(getX() + bmp.getWidth()) / Tile.tileWidth, tempY)) {
+            int tempY = (int)((getY() + getDirectionY() + bmp.getHeight()) / Tile.tileHeight);
+            if(!CollisionWithTile((int)getX() / Tile.tileWidth, tempY) && !CollisionWithTile((int)(getX() + bmp.getWidth()) / Tile.tileWidth, tempY)) {
                 setY(getY() + getDirectionY() * getSpeed() * time);
             }
         }
         else if(getDirectionY() < 0){//going down
             int tempY = (int) ((getY() + getDirectionY()) / Tile.tileHeight);
-            if(!CollisionWithTile((int)getX() / Tile.tileWidth, tempY) &&
-                    !CollisionWithTile((int)(getX() + bmp.getWidth()) / Tile.tileWidth, tempY)) {
+            if(!CollisionWithTile((int)getX() / Tile.tileWidth, tempY) && !CollisionWithTile((int)(getX() + bmp.getWidth()) / Tile.tileWidth, tempY)) {
                 setY(getY() + getDirectionY() * getSpeed() * time);
             }
         }
