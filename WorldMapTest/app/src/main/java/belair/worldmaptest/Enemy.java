@@ -52,6 +52,14 @@ public class Enemy extends Entity {
         canvas.drawText(Integer.toString(temp), getX(), getY() - 50, getPaint());
     }
 
+    protected void Attack(){//might have to pass in the other entity that it is hitting
+
+    }
+
+    protected void Defend(){//Dont think anything has to be passed through :/ maybe an int for the damage that is in question
+
+    }
+
 
 
 }

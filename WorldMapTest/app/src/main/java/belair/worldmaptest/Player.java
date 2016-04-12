@@ -173,5 +173,13 @@ public class Player extends Entity {
         }
     }
 
+    protected void Attack(){//might have to pass in the other entity that it is hitting
+
+    }
+
+    protected void Defend(){//Dont think anything has to be passed through :/ maybe an int for the damage that is in question
+
+    }
+
 
 }
