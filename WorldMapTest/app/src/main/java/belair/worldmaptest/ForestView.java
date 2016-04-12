@@ -36,6 +36,7 @@ import belair.worldmaptest.Tile.Tile;
 public class ForestView extends SurfaceView {
     Player player;
     Enemy enemy;
+    Tree tree;
     Log log;
     Map map;
     SurfaceHolder holder;
@@ -100,11 +101,10 @@ public class ForestView extends SurfaceView {
         enemy = new Enemy(1000, 1000);
         enemy.setBmp(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
 
-        log = new Log(1536,1700);
-        log.logImage = BitmapFactory.decodeResource(getResources(), R.drawable.log);
-
-        log.setRadius(log.logImage.getWidth() / 2);
-
+        tree = new Tree(1536,1700);
+        tree.logImage = BitmapFactory.decodeResource(getResources(), R.drawable.log);
+        tree.setRadius(tree.logImage.getWidth() / 2);
+        log = new Log("log", 1, 1, 100);
         player.setRadius(player.bmp.getWidth() / 2);
 
         //PARTICLE TEST
@@ -144,34 +144,47 @@ public class ForestView extends SurfaceView {
             enemy.setEnd(player.getX(), player.getY());
             enemy.Update();
 
-            player.CircleCircleCollision(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius());
+            player.CircleCircleCollision(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius());
             map.Draw(canvas);
             PE.Draw(canvas);
             if (isFingerDown) {
                 canvas.drawLine(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
             }
 
-            log.Render(canvas);
+            tree.Render(canvas);
             player.Render(canvas);
             enemy.Render(canvas);
             if(player.getIsColliding()){
-                paint.setColor(Color.GREEN);
-                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius(), paint);
+
+                //////////////////////////////
+                // Inventory stuff for logs //
+                //////////////////////////////
+                paint.setColor(Color.WHITE);
+                canvas.drawRect(player.getX() + 200, player.getY() - 760, player.getX() + 600, player.getY() - 560, paint);
+                paint.setColor(Color.BLUE);
+                canvas.drawText(log.itemName + "(" + log.quantity + ")", player.getX() + 220, player.getY() - 620, paint);
+                log.setQuantity(log.getQuantity() + 1);
+
+                /////////////////////////////
+                // Collision Debug Circles //
+                /////////////////////////////
+
+                canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
                 canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
 
             }
             else {
                 paint.setColor(Color.WHITE);
-                canvas.drawCircle(log.getX() + log.logImage.getWidth() / 2, log.getY() + log.logImage.getHeight() / 2, log.getRadius(), paint);
+                canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
                 canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
             }
 
             //inventoryButton = (Button)findViewById(R.id.InventoryButton);
             paint.setColor(Color.WHITE);
-            canvas.drawRect(player.getX() + 400, player.getY() - 760, player.getX() + 600, player.getY() - 560, paint);
+
             paint.setColor(Color.MAGENTA);
             paint.setTextSize(100);
-            canvas.drawText("INV", player.getX() + 420, player.getY() - 620, paint);
+
         }
     }
 

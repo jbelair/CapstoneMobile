@@ -1,30 +1,15 @@
 package belair.worldmaptest;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-
 /**
  * Created by Justin on 4/4/2016.
  */
-public class Log extends Entity{
+public class Log extends Item{
 
-    public Bitmap logImage;
-    Paint paint = new Paint();
-
-    public Log(float x, float y){
-        super(x, y);
-
-    }
-    @Override
-    public void Update() {
-
-    }
-
-    @Override
-    public void Render(Canvas canvas) {
-        paint.setColor(Color.TRANSPARENT);
-        canvas.drawBitmap(logImage, getX(), getY(), null);
+    public Log(String _itemName, int _id, int _quantity, int _value){
+        super(_itemName, _id, _quantity, _value);
+        this.itemName = "Log";
+        this.id = 1;
+        this.quantity = 1;
+        this.value = 100;
     }
 }

@@ -70,5 +70,4 @@ public class Inventory {
         RemoveItem(index);
         return tempValue;
     }
-
 }
