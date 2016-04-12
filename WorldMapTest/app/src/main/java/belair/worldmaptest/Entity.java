@@ -19,6 +19,8 @@ public abstract class Entity {
     private float distance = 0;
     private boolean isMoving = false;
 
+    Inventory inventory = new Inventory();
+
     private boolean isColliding = false;
     private float radius;
 
@@ -215,6 +217,8 @@ public abstract class Entity {
         float distance = (float)Math.sqrt(((getX() - otherX) * (getX() - otherX)) + ((getY() - otherY) * (getY() - otherY)));
         if(distance < getRadius() + otherRadius){
             setIsColliding(true);
+            inventory.AddItem(new Item("wood", 0,  5, 40));
+            System.out.println(inventory.GetItemName(0));
         }
         else{
             setIsColliding(false);
