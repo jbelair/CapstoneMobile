@@ -24,8 +24,10 @@ public class Tree extends Entity {
     @Override
     public void Update() {
         if(getIsAlive()) {
+
             if (amount <= 0) {
                 setIsAlive(false);
+                amount = rand.nextInt(10);
             } else {
 
                 amount -= 1;

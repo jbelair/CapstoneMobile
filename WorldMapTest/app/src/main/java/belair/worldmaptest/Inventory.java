@@ -1,5 +1,7 @@
 package belair.worldmaptest;
 
+import android.graphics.Canvas;
+
 import java.util.ArrayList;
 
 /**

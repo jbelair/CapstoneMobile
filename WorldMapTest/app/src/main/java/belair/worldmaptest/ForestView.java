@@ -5,19 +5,21 @@ package belair.worldmaptest;
 //    -  Tile based overworld.                          //
 //    -  World imported from text file                  //
 //    -  Player + Entity hierarchy                      //
-//    -                                                 //
+//    - Collision with Tiles                            //
+//    - Animations                                      //
+//    - Damage and Health systems for Entities          //
+//    - Particle system                                 //
+//    - Tree skill system                               //
 //                                                      //
 //      Updates Currently Implementing                  //
-//    - Collision with Entities                         //
-//    - Collision with Tiles                            //
+//    - Collision Detection with Entities               //
+//    - Collision Response with Entities                //
 //    - Code needs MASSIVE overhaul on organization     //
-//    - Animations                                      //
+//                                                      //
 //                                                      //
 //      Future Updates                                  //
 //    - Skill tree system                               //
-//    - Damage and Health systems for Entities          //
 //    - Active skills for skill trees                   //
-//    - Particle system                                 //
 //                                                      //
 //////////////////////////////////////////////////////////
 import android.content.Context;
@@ -45,7 +47,8 @@ public class ForestView extends SurfaceView {
     float yFinger = 0;
     ParticleEngine PE = new ParticleEngine();
     //Button inventoryButton;
-
+    private long lastTick, timer;
+    int speed;
     Boolean isFingerDown = false;
     Paint paint = new Paint();
     Random random = new Random();
@@ -82,6 +85,11 @@ public class ForestView extends SurfaceView {
                                        int width, int height) {
             }
         });
+
+
+        timer = 0;
+        lastTick = System.currentTimeMillis();
+
 
         map = new Map(context, "map.txt");
         player = new Player(0, 0, map);
@@ -160,30 +168,33 @@ public class ForestView extends SurfaceView {
                 // Inventory stuff for logs //
                 //////////////////////////////
 
+                // A tree holds a random amount of logs between 1-10,
+                // After that number the tree dies
+
                 paint.setColor(Color.WHITE);
                 canvas.drawRect(player.getX() + 200, player.getY() - 760, player.getX() + 600, player.getY() - 560, paint);
                 paint.setColor(Color.BLUE);
                 canvas.drawText(log.itemName + "(" + log.quantity + ")", player.getX() + 220, player.getY() - 620, paint);
                 if(tree.getIsAlive()) {
-                    tree.Update();
                     tree.Render(canvas);
+                    tree.Update();
+
                     log.setQuantity(log.getQuantity() + 1);
-                }
-                else{
 
                 }
+
 
                 /////////////////////////////
                 // Collision Debug Circles //
                 /////////////////////////////
 
-                canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
+                //canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
                 canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
 
             }
             else {
                 paint.setColor(Color.WHITE);
-                canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
+                //canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
                 canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
             }
 
@@ -193,6 +204,21 @@ public class ForestView extends SurfaceView {
             paint.setColor(Color.MAGENTA);
             paint.setTextSize(100);
 
+        }
+
+        if(tree.getIsAlive()) {
+
+            tree.Render(canvas);
+
+        }
+        else{
+            timer += System.currentTimeMillis() - lastTick;
+            lastTick = System.currentTimeMillis();
+
+            if(timer >= 10000.0f){
+                tree.setIsAlive(true);
+                timer = 0;
+            }
         }
     }
 
