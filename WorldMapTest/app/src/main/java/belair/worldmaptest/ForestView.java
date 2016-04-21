@@ -171,7 +171,7 @@ public class ForestView extends SurfaceView {
 
 
             enemy.Render(canvas);
-            if(player.getIsColliding()){
+            if(player.CircleCircleCollision(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius())){
 
                 //////////////////////////////
                 // Inventory stuff for logs //
