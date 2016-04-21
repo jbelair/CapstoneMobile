@@ -45,6 +45,7 @@ public class ForestView extends SurfaceView {
     private GameLoopThread gameLoopThread;
     float xFinger = 0;
     float yFinger = 0;
+    private float temp, deltaTime;
     ParticleEngine PE = new ParticleEngine();
     //Button inventoryButton;
     private long lastTick, timer;
@@ -157,6 +158,14 @@ public class ForestView extends SurfaceView {
             PE.Draw(canvas);
             if (isFingerDown) {
                 canvas.drawLine(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, xFinger, yFinger, paint);
+            }
+            deltaTime = System.currentTimeMillis() - lastTick;
+            lastTick = System.currentTimeMillis();
+            temp += deltaTime;
+            if (player.CircleCircleCollision(enemy.getX(), enemy.getY(),
+                    enemy.getRadius()) && temp >= 1000.0f){
+                temp = temp % 1000.0f;
+                player.Attacked(10);
             }
 
 

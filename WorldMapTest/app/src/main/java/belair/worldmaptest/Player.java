@@ -32,7 +32,7 @@ public class Player extends Entity {
         super(x, y);
         ///FOR COLLISION
         this.map = map;
-        SetEntityHealthAttributes(200, 200, true, 10, 5);
+        SetEntityHealthAttributes(200, 200, true, 5, 5);
 
         walkDown = new Animation(500, animWalkDown);
         walkUp = new Animation(500, animWalkUp);
@@ -63,12 +63,6 @@ public class Player extends Entity {
         temp += deltaTime;
         this.PassiveRegen(deltaTime);
         this.paint.setColor(Color.GREEN);
-
-        if (temp >=10000.0f){
-            this.DecreaseHealth(10);
-            temp = temp % 10000.0f;
-            this.paint.setColor(Color.RED);
-        }
 
         if(getIsMoving()){
             setStartX(getX());
@@ -173,13 +167,7 @@ public class Player extends Entity {
         }
     }
 
-    protected void Attack(){//might have to pass in the other entity that it is hitting
-
+    protected void Attacked(int damageTaken){
+        DecreaseHealth(damageTaken);
     }
-
-    protected void Defend(){//Dont think anything has to be passed through :/ maybe an int for the damage that is in question
-
-    }
-
-
 }

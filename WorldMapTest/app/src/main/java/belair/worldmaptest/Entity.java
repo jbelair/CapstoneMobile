@@ -133,7 +133,7 @@ public abstract class Entity {
     protected int getBaseArmour() { return this.baseArmour; }
     protected void setBaseArmour(int _newArmourVal) { this.baseArmour = _newArmourVal; }
 
-    protected void SetEntityHealthAttributes(int _health, int _maxHealth, boolean _canRegen, int _regenAmountPerSecond, int _baseArmour ){
+    protected void SetEntityHealthAttributes(int _health, int _maxHealth, boolean _canRegen, int _regenAmountPerSecond, int _baseArmour){
         setHealth(_health);
         setMaxHealth(_maxHealth);
         setRegenability(_canRegen);
@@ -220,20 +220,23 @@ public abstract class Entity {
     /*
     * Justin
     */
-    protected void CircleCircleCollision(float otherX, float otherY, float otherRadius){
+    protected boolean CircleCircleCollision(float otherX, float otherY, float otherRadius){
 
         float distance = (float)Math.sqrt(((getX() - otherX) * (getX() - otherX)) + ((getY() - otherY) * (getY() - otherY)));
         if(distance < getRadius() + otherRadius){
             setIsColliding(true);
-            inventory.AddItem(new Weapon("sword", 2, 5, 10, 15, 5, 1, 50));
-            System.out.println(inventory.GetItemName(0));
+            //MATTS INVENTORY STUFF
+//            inventory.AddItem(new Weapon("sword", 2, 5, 10, 15, 5, 1, 50));
+//            System.out.println(inventory.GetItemName(0));
 //            inventory.AddItem(new Item("wood", 1, 5, 40));
 //            System.out.println(inventory.GetItemQuantity(0));
 //            setCurrency(inventory.SellItemStack(0));
 //            System.out.println(currency);
+            return true;
         }
         else{
             setIsColliding(false);
+            return false;
         }
     }
 
