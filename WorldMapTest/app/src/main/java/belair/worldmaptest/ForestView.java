@@ -160,7 +160,7 @@ public class ForestView extends SurfaceView {
             }
 
 
-            player.Render(canvas);
+
             enemy.Render(canvas);
             if(player.getIsColliding()){
 
@@ -189,13 +189,13 @@ public class ForestView extends SurfaceView {
                 /////////////////////////////
 
                 //canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
-                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
+                //canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
 
             }
             else {
                 paint.setColor(Color.WHITE);
                 //canvas.drawCircle(tree.getX() + tree.logImage.getWidth() / 2, tree.getY() + tree.logImage.getHeight() / 2, tree.getRadius(), paint);
-                canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
+                //canvas.drawCircle(player.getX() + player.bmp.getWidth() / 2, player.getY() + player.bmp.getHeight() / 2, player.getRadius(), paint);
             }
 
             //inventoryButton = (Button)findViewById(R.id.InventoryButton);
@@ -220,6 +220,7 @@ public class ForestView extends SurfaceView {
                 timer = 0;
             }
         }
+        player.Render(canvas);
     }
 
     public boolean onTouchEvent(MotionEvent event){
