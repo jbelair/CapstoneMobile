@@ -213,23 +213,24 @@ public class ForestView extends SurfaceView {
             paint.setColor(Color.MAGENTA);
             paint.setTextSize(100);
 
-        }
+            if(tree.getIsAlive()) {
 
-        if(tree.getIsAlive()) {
+                tree.Render(canvas);
 
-            tree.Render(canvas);
-
-        }
-        else{
-            timer += System.currentTimeMillis() - lastTick;
-            lastTick = System.currentTimeMillis();
-
-            if(timer >= 10000.0f){
-                tree.setIsAlive(true);
-                timer = 0;
             }
+            else{
+                timer += System.currentTimeMillis() - lastTick;
+                lastTick = System.currentTimeMillis();
+
+                if(timer >= 10000.0f){
+                    tree.setIsAlive(true);
+                    timer = 0;
+                }
+            }
+            player.Render(canvas);
         }
-        player.Render(canvas);
+
+
     }
 
     public boolean onTouchEvent(MotionEvent event){
