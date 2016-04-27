@@ -146,7 +146,9 @@ public class ForestView extends SurfaceView {
             //Updating everything
             PE.Update();
             map.Update();
-            player.Update();
+            if (player.getIsAlive()){
+                player.Update();
+            }
             if (player.getIsAlive() && player.getIsMoving() && Math.sqrt(Math.pow(getX() - enemy.getStartX(),2) + Math.pow(getY() - enemy.getStartY(),2)) <= enemy.getDistance() && !enemy.getIsMoving()){
                 enemy.setIsMoving(true);
             }
@@ -165,7 +167,7 @@ public class ForestView extends SurfaceView {
             if (player.CircleCircleCollision(enemy.getX(), enemy.getY(),
                     enemy.getRadius()) && temp >= 1000.0f){
                 temp = temp % 1000.0f;
-                player.Attacked(10);
+                player.Attacked(20);
             }
 
 
